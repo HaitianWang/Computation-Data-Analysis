@@ -211,7 +211,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 283521	F	TRUE	172000	Married	TRUE	Homeowner with mortgage/loan	FALSE	2	55	Wisconsin
 283607	M	TRUE	20000	Married	TRUE	Rented	TRUE	2	41	Tennessee
 284973	F	FALSE	19000	Divorced/Separated	TRUE	Rented	FALSE	2	30	Illinois
-287882	M	TRUE	60000	Married	TRUE	Rented	TRUE	2	137.70002958132	Florida
+287882	M	TRUE	60000	Married	TRUE	Rented	TRUE	2	137.7000296	Florida
 291564	F	NA	28100	Widowed	TRUE	Homeowner free and clear	FALSE	1	75	New York
 291599	M	TRUE	45000	Married	TRUE	Rented	FALSE	2	27	California
 291608	F	NA	24700	Widowed	TRUE	Homeowner free and clear	FALSE	1	79	Georgia
@@ -265,7 +265,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 361968	M	FALSE	27200	Divorced/Separated	TRUE	Rented	FALSE	1	68	New York
 363008	F	NA	5400	Married	TRUE	Rented	FALSE	1	84	Illinois
 364328	M	TRUE	67000	Married	TRUE	Rented	FALSE	1	30	Louisiana
-364991	F	NA	12000	Divorced/Separated	TRUE	Homeowner with mortgage/loan	FALSE	1	123.061022636481	Nevada
+364991	F	NA	12000	Divorced/Separated	TRUE	Homeowner with mortgage/loan	FALSE	1	123.0610226	Nevada
 368645	M	TRUE	83000	Married	TRUE	Homeowner free and clear	FALSE	2	52	Michigan
 373976	F	TRUE	27000	Divorced/Separated	TRUE	Rented	TRUE	1	56	New York
 374461	M	NA	58600	Divorced/Separated	TRUE	Rented	FALSE	1	80	Mississippi
@@ -285,7 +285,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 396116	F	NA	0	Married	TRUE	Rented	FALSE	2	25	South Carolina
 396256	M	TRUE	36400	Married	FALSE	Homeowner with mortgage/loan	FALSE	3	34	Minnesota
 396675	F	TRUE	60000	Never Married	TRUE	Rented	TRUE	1	45	Illinois
-397230	F	TRUE	31200	Married	TRUE	Rented	FALSE	2	136.052159552928	Texas
+397230	F	TRUE	31200	Married	TRUE	Rented	FALSE	2	136.0521596	Texas
 399150	M	TRUE	50000	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	38	Florida
 399930	M	TRUE	55000	Divorced/Separated	TRUE	Homeowner with mortgage/loan	FALSE	2	42	Florida
 403690	M	FALSE	34020	Divorced/Separated	FALSE	Homeowner with mortgage/loan	FALSE	2	50	New York
@@ -592,7 +592,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 835830	F	TRUE	51000	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	41	Washington
 837381	M	TRUE	10800	Never Married	TRUE	NA	NA	NA	20	Virginia
 841342	M	TRUE	85050	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	62	Texas
-843811	F	TRUE	40000	Never Married	TRUE	Homeowner with mortgage/loan	FALSE	1	146.680196558591	Indiana
+843811	F	TRUE	40000	Never Married	TRUE	Homeowner with mortgage/loan	FALSE	1	146.6801966	Indiana
 844007	M	NA	0	Married	FALSE	NA	NA	NA	46	California
 845421	F	FALSE	4300	Married	TRUE	Rented	FALSE	0	27	Ohio
 846713	M	NA	250	Never Married	TRUE	NA	NA	NA	45	Florida
@@ -624,7 +624,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 872071	M	TRUE	141100	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	57	Minnesota
 873626	F	TRUE	35000	Married	TRUE	Homeowner with mortgage/loan	FALSE	2	46	Texas
 874159	F	TRUE	7500	Married	TRUE	Homeowner with mortgage/loan	FALSE	2	47	North Carolina
-875771	M	FALSE	175200	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	124.845087232534	Arkansas
+875771	M	FALSE	175200	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	124.8450872	Arkansas
 876972	F	TRUE	10000	Married	FALSE	Rented	TRUE	3	28	New York
 878578	M	TRUE	24000	Never Married	TRUE	Homeowner with mortgage/loan	FALSE	2	38	Texas
 878875	M	TRUE	40500	Married	TRUE	Rented	TRUE	2	37	Louisiana
@@ -751,7 +751,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 1044036	F	TRUE	52000	Never Married	TRUE	Homeowner with mortgage/loan	FALSE	1	31	Ohio
 1046317	F	NA	19000	Widowed	TRUE	Homeowner with mortgage/loan	FALSE	1	89	Indiana
 1046696	M	TRUE	24800	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	65	Maryland
-1047534	M	TRUE	200000	Married	TRUE	Homeowner with mortgage/loan	FALSE	4	130.401604710147	Washington
+1047534	M	TRUE	200000	Married	TRUE	Homeowner with mortgage/loan	FALSE	4	130.4016047	Washington
 1048652	F	NA	1400	Divorced/Separated	TRUE	Rented	TRUE	1	77	Louisiana
 1048836	M	TRUE	40000	Married	TRUE	Rented	FALSE	3	55	Maryland
 1051439	M	TRUE	96000	Married	TRUE	Homeowner with mortgage/loan	FALSE	2	40	Massachusetts
@@ -925,7 +925,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 1297652	M	TRUE	165200	Married	TRUE	Homeowner with mortgage/loan	FALSE	3	62	California
 1299959	M	TRUE	19200	Married	TRUE	Rented	FALSE	3	51	California
 1303744	M	TRUE	23000	Divorced/Separated	TRUE	Rented	TRUE	2	44	Missouri
-1303929	F	FALSE	43400	Never Married	TRUE	Rented	FALSE	1	126.737284407951	West Virginia
+1303929	F	FALSE	43400	Never Married	TRUE	Rented	FALSE	1	126.7372844	West Virginia
 1305771	F	TRUE	14400	Never Married	TRUE	Rented	TRUE	1	31	Virginia
 1307013	F	NA	0	Widowed	FALSE	Rented	FALSE	5	55	New York
 1310634	M	TRUE	18000	Never Married	FALSE	Rented	FALSE	0	24	California
@@ -952,7 +952,7 @@ custid	sex	is.employed	income	marital.stat	health.ins	housing.type	recent.move	n
 1358975	F	TRUE	92000	Divorced/Separated	TRUE	Homeowner with mortgage/loan	FALSE	1	46	North Carolina
 1359790	M	NA	79950	Married	TRUE	Homeowner free and clear	FALSE	2	67	West Virginia
 1359848	F	FALSE	13000	Married	FALSE	Homeowner free and clear	FALSE	4	59	Oregon
-1361012	F	NA	255000	Widowed	TRUE	Homeowner free and clear	FALSE	1	113.337207373232	Tennessee
+1361012	F	NA	255000	Widowed	TRUE	Homeowner free and clear	FALSE	1	113.3372074	Tennessee
 1361709	M	NA	10800	Married	TRUE	Rented	FALSE	2	70	West Virginia
 1362854	F	NA	35700	Married	FALSE	Homeowner with mortgage/loan	FALSE	1	28	Illinois
 1364327	M	TRUE	30000	Married	TRUE	Rented	FALSE	2	40	Texas
