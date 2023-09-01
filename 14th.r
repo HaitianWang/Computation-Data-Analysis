@@ -8,3 +8,15 @@ ggplot(data = custdata) +
 #   geom_point(mapping = aes(x = age, y = log(income))) +
 #   facet_grid( sex ~ marital.stat )
 
+
+
+
+
+
+
+
+
+
+
+
+
