@@ -98,41 +98,83 @@ cat("Missing data for channels with low video views:\n")
 print(na_low_views)
 
 
-# 使用ggplot来绘制数据分析
-p1 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
-  geom_density(color = "#3366CC") +
-  scale_x_continuous(trans = 'log10') +
-  ggtitle("YouTube Subscribers (Log Scale)") + 
+# # 使用ggplot来绘制数据分析
+# p1 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
+#   geom_density(color = "#3366CC") +
+#   scale_x_continuous(trans = 'log10') +
+#   ggtitle("YouTube Subscribers (Log Scale)") + 
+#   custom_youtube_theme()
+# 
+# p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
+#   geom_density(color = "#3366CC") +
+#   coord_cartesian(xlim = c(12300000, 50000000)) +
+#   ggtitle("YouTube Subscribers (12.3M to 50M)") + 
+#   custom_youtube_theme()
+# 
+# # 绘制使用对数尺度的视频观看数图形
+# p3 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
+#   geom_density(color = "#3366CC") +
+#   scale_x_continuous(trans = 'log10', labels = scales::comma) +
+#   ggtitle("YouTube Video Views (Log Scale)") +
+#   custom_youtube_theme()
+# 
+# # 绘制专注于某一特定范围的视频观看数图形。此处我们可以选取Q1到Q3范围
+# p4 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
+#   geom_density(color = "#3366CC") +
+#   coord_cartesian(xlim = c(4.288e+09, 1.355e+10)) +
+#   ggtitle("YouTube Video Views (4.288B to 13.55B)") +
+#   custom_youtube_theme()
+# 
+
+# p5 <- ggplot(youtube_data, aes(x=subscribers, y=video.views)) +
+#   geom_point(aes(color=channel_type), alpha=0.5) +
+#   geom_smooth(method=lm) +
+#   labs(title="Relation between Subscribers and Video Views",
+#        x="Subscribers", y="Video Views", color="Channel Type") +
+#   custom_youtube_theme()
+# 
+# print(p5)
+# cor.test(youtube_data$subscribers, youtube_data$video.views, method="pearson")
+
+# Pearson's product-moment correlation
+# 
+# data:  youtube_data$subscribers and youtube_data$video.views
+# t = 38.018, df = 993, p-value < 2.2e-16
+# alternative hypothesis: true correlation is not equal to 0
+# 95 percent confidence interval:
+#  0.7433282 0.7940631
+# sample estimates:
+#       cor
+# 0.7699095
+
+# grid.arrange(p1, p2, p3, p4, ncol = 2)
+
+
+# 绘制每个国家的YouTuber数量
+p6 <- ggplot(data = youtube_data, mapping = aes(x = Country)) +
+  geom_bar(fill = "#99CCFF", color = "#3366CC") +
+  ggtitle("Number of YouTubers per Country") + 
   custom_youtube_theme()
 
-p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
-  geom_density(color = "#3366CC") +
-  coord_cartesian(xlim = c(12300000, 50000000)) +
-  ggtitle("YouTube Subscribers (12.3M to 50M)") + 
-  custom_youtube_theme()
+# print(p6)
 
-# 绘制使用对数尺度的视频观看数图形
-p3 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
-  geom_density(color = "#3366CC") +
-  scale_x_continuous(trans = 'log10', labels = scales::comma) +
-  ggtitle("YouTube Video Views (Log Scale)") +
-  custom_youtube_theme()
+# 计算每个国家的平均订阅者数量
+Country_avg_subscribers <- youtube_data %>% 
+  group_by(Country) %>%
+  summarise(avg_subscribers = mean(subscribers))
 
-# 绘制专注于某一特定范围的视频观看数图形。此处我们可以选取Q1到Q3范围
-p4 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
-  geom_density(color = "#3366CC") +
-  coord_cartesian(xlim = c(4.288e+09, 1.355e+10)) +
-  ggtitle("YouTube Video Views (4.288B to 13.55B)") +
+# 绘制每个国家的平均订阅者数量
+p7 <- ggplot(data = Country_avg_subscribers, aes(x = Country, y = avg_subscribers)) +
+  geom_bar(stat="identity", fill = "#99CCFF", color = "#3366CC") +
+  ggtitle("Average Subscribers per Country") +
   custom_youtube_theme()
 
 
-grid.arrange(p1, p2, p3, p4, ncol = 2)
-
-
+print(p7)
 
 
 
