@@ -72,6 +72,13 @@ youtube_data$video.views[youtube_data$video.views == 0] <- views_mean
 uploads_mean <- mean(youtube_data$uploads[youtube_data$uploads > 0], na.rm = TRUE)
 youtube_data$uploads[youtube_data$uploads == 0] <- uploads_mean
 
+
+# 9. 清洗 highest_monthly_earnings 列中的零或负值
+# 使用最小的正值替换零和负值，这样对数转换就不会产生无限值
+min_positive_earning <- min(youtube_data$highest_monthly_earnings[youtube_data$highest_monthly_earnings > 0], na.rm = TRUE)
+youtube_data$highest_monthly_earnings[youtube_data$highest_monthly_earnings <= 0] <- min_positive_earning
+
+
 # Step 2: Analyze the number of NA for each variable
 
 na_counts <- apply(is.na(youtube_data), 2, sum)
@@ -98,29 +105,30 @@ cat("Missing data for channels with low video views:\n")
 print(na_low_views)
 
 
-# # 使用ggplot来绘制数据分析
-# p1 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
-#   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
-#   geom_density(color = "#3366CC") +
-#   scale_x_continuous(trans = 'log10') +
-#   ggtitle("YouTube Subscribers (Log Scale)") + 
-#   custom_youtube_theme()
+# 使用ggplot来绘制数据分析
+# 分析subscribers变量的分布情况
+p1 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
+  geom_density(color = "#3366CC") +
+  scale_x_continuous(trans = 'log10') +
+  ggtitle("YouTube Subscribers (Log Scale)") +
+  custom_youtube_theme()
+
+p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
+  geom_density(color = "#3366CC") +
+  coord_cartesian(xlim = c(12300000, 50000000)) +
+  ggtitle("YouTube Subscribers (12.3M to 50M)") +
+  custom_youtube_theme()
 # 
-# p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
-#   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
-#   geom_density(color = "#3366CC") +
-#   coord_cartesian(xlim = c(12300000, 50000000)) +
-#   ggtitle("YouTube Subscribers (12.3M to 50M)") + 
-#   custom_youtube_theme()
-# 
-# # 绘制使用对数尺度的视频观看数图形
+# 绘制使用对数尺度的视频观看数图形
 # p3 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
 #   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
 #   geom_density(color = "#3366CC") +
 #   scale_x_continuous(trans = 'log10', labels = scales::comma) +
 #   ggtitle("YouTube Video Views (Log Scale)") +
 #   custom_youtube_theme()
-# 
+# #
 # # 绘制专注于某一特定范围的视频观看数图形。此处我们可以选取Q1到Q3范围
 # p4 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
 #   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
@@ -129,19 +137,19 @@ print(na_low_views)
 #   ggtitle("YouTube Video Views (4.288B to 13.55B)") +
 #   custom_youtube_theme()
 # 
-
+# 
 # p5 <- ggplot(youtube_data, aes(x=subscribers, y=video.views)) +
 #   geom_point(aes(color=channel_type), alpha=0.5) +
 #   geom_smooth(method=lm) +
 #   labs(title="Relation between Subscribers and Video Views",
 #        x="Subscribers", y="Video Views", color="Channel Type") +
 #   custom_youtube_theme()
-# 
+#
 # print(p5)
 # cor.test(youtube_data$subscribers, youtube_data$video.views, method="pearson")
 
 # Pearson's product-moment correlation
-# 
+#
 # data:  youtube_data$subscribers and youtube_data$video.views
 # t = 38.018, df = 993, p-value < 2.2e-16
 # alternative hypothesis: true correlation is not equal to 0
@@ -154,27 +162,101 @@ print(na_low_views)
 # grid.arrange(p1, p2, p3, p4, ncol = 2)
 
 
-# 绘制每个国家的YouTuber数量
-p6 <- ggplot(data = youtube_data, mapping = aes(x = Country)) +
-  geom_bar(fill = "#99CCFF", color = "#3366CC") +
-  ggtitle("Number of YouTubers per Country") + 
+# # 1. 绘制每个国家的YouTuber数量
+# p6 <- ggplot(data = youtube_data, mapping = aes(x = Country)) +
+#   geom_bar(fill = "#99CCFF", color = "#3366CC") +
+#   ggtitle("Number of YouTubers per Country") + 
+#   custom_youtube_theme()
+# 
+# # 2. 选择数量较多的国家
+# top_countries <- youtube_data %>%
+#   count(Country) %>%
+#   arrange(-n) %>%
+#   head(10)
+# 
+# filtered_data <- youtube_data %>%
+#   filter(Country %in% top_countries$Country)
+# 
+# # 绘制筛选后国家的YouTuber数量
+# p7 <- ggplot(data = filtered_data, mapping = aes(x = Country)) +
+#   geom_bar(fill = "#99CCFF", color = "#3366CC") +
+#   ggtitle("Number of YouTubers in Top 10 Countries") + 
+#   custom_youtube_theme()
+# 
+# # 3. 对这些国家进行更详细的订阅者数分析
+# gd <- filtered_data %>%
+#   group_by(Country) %>%
+#   summarise(average_subscribers = mean(subscribers, na.rm = T))
+# 
+# p8 <- ggplot(data = filtered_data, 
+#              mapping = aes(y = subscribers, x = Country))+
+#   geom_violin(fill ='lightgray')+
+#   geom_point(data = gd, aes(y = average_subscribers, shape='mean'), color='darkred', size=4)+
+#   ggtitle("Distribution of Subscribers in Top 10 Countries") + 
+#   custom_youtube_theme()
+
+#print(p8)
+
+#分析视频观看次数与最高月收入的关系
+
+# 首先分析最高月收入的分布情况
+# 1. 直方图 (对数尺度)
+# p9 <- ggplot(data = youtube_data, mapping = aes(x = highest_monthly_earnings)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
+#   geom_density(color = "#3366CC") +
+#   scale_x_continuous(trans = 'log10', labels = scales::comma) +
+#   ggtitle("Histogram of Highest Monthly Earnings (Log Scale)") +
+#   custom_youtube_theme()
+# 
+# # 2. 箱线图
+# p10 <- ggplot(data = youtube_data, mapping = aes(y = highest_monthly_earnings)) +
+#   geom_boxplot(fill = "#99CCFF", color = "#3366CC") +
+#   ggtitle("Boxplot of Highest Monthly Earnings") +
+#   custom_youtube_theme()
+# 
+# grid.arrange(p9, p10, ncol = 2)
+# 
+# 
+# # 接着分析视频观看次数与最高月收入的关系
+# # 散点图
+# p11 <- ggplot(youtube_data, aes(x=video.views, y=highest_monthly_earnings)) +
+#   geom_point(aes(color=channel_type), alpha=0.5) +
+#   geom_smooth(method=lm) + # 添加线性回归线
+#   labs(title="Relation between Video Views and Highest Monthly Earnings",
+#        x="Video Views", y="Highest Monthly Earnings", color="Channel Type") +
+#   custom_youtube_theme()
+# 
+# print(p11)
+# 
+# # 分析Pearson相关系数
+# cor_result <- cor.test(youtube_data$video.views, youtube_data$highest_monthly_earnings, method="pearson")
+# print(cor_result)
+
+
+# 创建年份的分布情况
+p3 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
+  geom_histogram(fill = "#99CCFF", color = "#3366CC", binwidth = 1) +
+  ggtitle("Distribution of YouTube Channel Creation Year") +
   custom_youtube_theme()
 
-# print(p6)
-
-# 计算每个国家的平均订阅者数量
-Country_avg_subscribers <- youtube_data %>% 
-  group_by(Country) %>%
-  summarise(avg_subscribers = mean(subscribers))
-
-# 绘制每个国家的平均订阅者数量
-p7 <- ggplot(data = Country_avg_subscribers, aes(x = Country, y = avg_subscribers)) +
-  geom_bar(stat="identity", fill = "#99CCFF", color = "#3366CC") +
-  ggtitle("Average Subscribers per Country") +
-  custom_youtube_theme()
+print(p3)
 
 
-print(p7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
