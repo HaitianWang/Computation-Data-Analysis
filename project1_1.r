@@ -34,6 +34,8 @@ custom_youtube_theme <- function() {
     )
 }
 
+
+
 # 1. 转换字符列
 youtube_data$Youtuber <- as.character(youtube_data$Youtuber)
 youtube_data$Title <- as.character(youtube_data$Title)
@@ -41,6 +43,20 @@ youtube_data$Title <- as.character(youtube_data$Title)
 # 2. 转换因子列
 youtube_data$Country <- as.factor(youtube_data$Country)
 youtube_data$channel_type <- as.factor(youtube_data$channel_type)
+
+# 获取youtube_data中所有数值列
+numeric_columns <- names(youtube_data)[sapply(youtube_data, is.numeric)]
+
+# 遍历每一个数值列
+for (column_name in numeric_columns) {
+  
+  # 计算列的中位数，排除非有限值
+  median_value <- median(youtube_data[[column_name]][is.finite(youtube_data[[column_name]])], na.rm = TRUE)
+  
+  # 替换该列中的非有限值为中位数
+  youtube_data[[column_name]][!is.finite(youtube_data[[column_name]])] <- median_value
+}
+
 
 # 3. 计算subscribers列的平均值，排除非有限值
 mean_value <- mean(youtube_data$subscribers[is.finite(youtube_data$subscribers)], na.rm = TRUE)
@@ -144,7 +160,7 @@ p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
 #   labs(title="Relation between Subscribers and Video Views",
 #        x="Subscribers", y="Video Views", color="Channel Type") +
 #   custom_youtube_theme()
-#
+# 
 # print(p5)
 # cor.test(youtube_data$subscribers, youtube_data$video.views, method="pearson")
 
@@ -234,14 +250,36 @@ p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
 
 
 # 创建年份的分布情况
-p3 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
-  geom_histogram(fill = "#99CCFF", color = "#3366CC", binwidth = 1) +
-  ggtitle("Distribution of YouTube Channel Creation Year") +
+p12 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
+  geom_histogram(aes(y = after_stat(density)), binwidth=1, fill = "#99CCFF", color = "#3366CC") +
+  geom_density(color = "#3366CC") +
+  ggtitle("Distribution of YouTube Channel Creation Year (Density)") +
   custom_youtube_theme()
 
-print(p3)
+# 创建年份2010年至2020年之间的分布情况
+p13 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
+  geom_histogram(aes(y = after_stat(density)), binwidth=0.5, fill = "#99CCFF", color = "#3366CC") +
+  geom_density(color = "#3366CC") +
+  coord_cartesian(xlim = c(2010, 2020)) +
+  ggtitle("YouTube Channel Creation Year (2010 to 2020)") +
+  custom_youtube_theme()
 
 
+# Filter data for years between 2010 and 2020
+youtube_data_filtered <- youtube_data[youtube_data$created_year >= 2010 & youtube_data$created_year <= 2020,]
+
+# Plotting the relationship between 'created_year' and 'subscribers' using a bar plot
+p14 <- ggplot(data = youtube_data_filtered, aes(x = factor(created_year), y = subscribers)) +
+  geom_bar(stat = "summary", fun = mean, fill = "#99CCFF", color = "#3366CC", width = 0.7) +
+  geom_smooth(aes(group = 1), method = "lm", color = "red", se = FALSE) +
+  labs(title = "Relation between Year of Creation and Average Subscribers (2010-2020)",
+       x = "Year of Creation", y = "Average Subscribers") +
+  custom_youtube_theme()
+
+print(p14)
+
+cor_result <- cor.test(youtube_data_filtered$created_year, youtube_data_filtered$subscribers, method = "pearson")
+print(cor_result)
 
 
 
