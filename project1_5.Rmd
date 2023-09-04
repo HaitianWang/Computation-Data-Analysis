@@ -1,22 +1,37 @@
+---
+title: "CITS4009 project1"
+author: "Haitian Wang"
+student Number: "23815631"
+date: "2023-09-03"
+output: html_document
+---
+
+1. Introduction:
+(1) 介绍数据集由来
+(2) 介绍组织和数据集的作用
+(3) 说明清洗的目的
+
+2. Data loading, Overview and Set up
+介绍这一块，说明其目的和作用
+
+2.1 Load libraries
+```{r Load libraries, message=FALSE}
+
 library(tidyverse) 
 library(lubridate)
 library(gridExtra)
 library(reshape2)
 library(grid)
+```
 
-
+2.2 Main Data Loading
+```{r}
 data.path <- './Global_YouTube_Statistics.csv'
 youtube_data <- read.csv(data.path)
+```
 
-# Data structure
-str(youtube_data)
-
-# Summary of the data
-summary(youtube_data)
-
-# View the first few rows
-head(youtube_data)
-
+2.2 Plotting Theme setting
+```{r}
 custom_youtube_theme <- function() {
   theme_minimal(base_size = 12) + 
     theme(
@@ -29,7 +44,25 @@ custom_youtube_theme <- function() {
       plot.margin = margin(20, 40, 20, 40)
     )
 }
+```
 
+2.3 Analyze the data structure
+```{r}
+str(youtube_data)
+```
+
+2.4 Analyze the data Summary 
+```{r}
+summary(youtube_data)
+```
+
+2.5 Analyze the first few rows of dataset
+```{r}
+head(youtube_data)
+```
+
+
+```{r}
 # 1. 转换字符列
 youtube_data$Youtuber <- as.character(youtube_data$Youtuber)
 youtube_data$Title <- as.character(youtube_data$Title)
@@ -95,7 +128,7 @@ min_positive_earning <- min(youtube_data$highest_monthly_earnings[youtube_data$h
 youtube_data$highest_monthly_earnings[youtube_data$highest_monthly_earnings <= 0] <- min_positive_earning
 
 
-# i. 替换数值列中的NA值
+# 10. 替换数值列中的NA值
 for (column_name in numeric_columns) {
   
   # 判断是否要使用mean还是median
@@ -103,11 +136,8 @@ for (column_name in numeric_columns) {
   mean_value <- mean(youtube_data[[column_name]], na.rm = TRUE)
   median_value <- median(youtube_data[[column_name]], na.rm = TRUE)
   
-  # 使用mean替换NA
-  youtube_data[[column_name]][is.na(youtube_data[[column_name]])] <- mean_value
-  
-  # 使用median替换NA (如果你决定用median，那么取消下面这行的注释)
-  # youtube_data[[column_name]][is.na(youtube_data[[column_name]])] <- median_value
+  # 使用median替换NA
+  youtube_data[[column_name]][is.na(youtube_data[[column_name]])] <- median_value
 }
 
 
@@ -147,14 +177,16 @@ p1 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
   scale_x_continuous(trans = 'log10') +
   ggtitle("YouTube Subscribers (Log Scale)") +
   custom_youtube_theme()
-# 
+print(p1)
+
 p2 <- ggplot(data = youtube_data, mapping = aes(x = subscribers)) +
   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
   geom_density(color = "#3366CC") +
   coord_cartesian(xlim = c(12300000, 50000000)) +
   ggtitle("YouTube Subscribers (12.3M to 50M)") +
   custom_youtube_theme()
-# 
+print(p2)
+
 # 绘制使用对数尺度的视频观看数图形
 p3 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
   geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
@@ -162,7 +194,9 @@ p3 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
   scale_x_continuous(trans = 'log10', labels = scales::comma) +
   ggtitle("YouTube Video Views (Log Scale)") +
   custom_youtube_theme()
-# #
+print(p3)
+
+
 # 绘制专注于某一特定范围的视频观看数图形。此处我们可以选取Q1到Q3范围
 p4 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
   geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "#99CCFF", color = "#3366CC") +
@@ -170,15 +204,17 @@ p4 <- ggplot(data = youtube_data, mapping = aes(x = video.views)) +
   coord_cartesian(xlim = c(4.288e+09, 1.355e+10)) +
   ggtitle("YouTube Video Views (4.288B to 13.55B)") +
   custom_youtube_theme()
-# 
-# 
+print(p4)
+ 
+ 
 p5 <- ggplot(youtube_data, aes(x=subscribers, y=video.views)) +
   geom_point(aes(color=channel_type), alpha=0.5) +
   geom_smooth(method=lm) +
   labs(title="Relation between Subscribers and Video Views",
        x="Subscribers", y="Video Views", color="Channel Type") +
   custom_youtube_theme()
-# 
+print(p5)
+
 # print(p5)
 # cor.test(youtube_data$subscribers, youtube_data$video.views, method="pearson")
 
@@ -202,7 +238,8 @@ p6 <- ggplot(data = youtube_data, mapping = aes(x = Country)) +
   ggtitle("Number of YouTubers per Country") +
   coord_flip()+
   custom_youtube_theme()
-# 
+print(p6)
+
 # 2. 选择数量较多的国家
 top_countries <- youtube_data %>%
   count(Country) %>%
@@ -218,6 +255,8 @@ p7 <- ggplot(data = filtered_data, mapping = aes(x = Country)) +
   ggtitle("Number of YouTubers in Top 10 Countries") +
   coord_flip()+
   custom_youtube_theme()
+print(p7)
+
 # 
 # 3. 对这些国家进行更详细的订阅者数分析
 gd <- filtered_data %>%
@@ -231,8 +270,7 @@ p8 <- ggplot(data = filtered_data,
   ggtitle("Distribution of Subscribers in Top 10 Countries") +
   coord_flip()+
   custom_youtube_theme()
-# 
-# print(p8)
+print(p8)
 
 #分析视频观看次数与最高月收入的关系
 
@@ -244,15 +282,17 @@ p9 <- ggplot(data = youtube_data, mapping = aes(x = highest_monthly_earnings)) +
   scale_x_continuous(trans = 'log10', labels = scales::comma) +
   ggtitle("Histogram of Highest Monthly Earnings (Log Scale)") +
   custom_youtube_theme()
+print(p9)
 # 
 # 2. 箱线图
 p10 <- ggplot(data = youtube_data, mapping = aes(y = highest_monthly_earnings)) +
   geom_boxplot(fill = "#99CCFF", color = "#3366CC") +
   ggtitle("Boxplot of Highest Monthly Earnings") +
   custom_youtube_theme()
+print(p10)
 
-grid.arrange(p9, p10, ncol = 2)
-# 
+# grid.arrange(p9, p10, ncol = 2)
+
 # 
 # 接着分析视频观看次数与最高月收入的关系
 # 散点图
@@ -262,9 +302,8 @@ p11 <- ggplot(youtube_data, aes(x=video.views, y=highest_monthly_earnings)) +
   labs(title="Relation between Video Views and Highest Monthly Earnings",
        x="Video Views", y="Highest Monthly Earnings", color="Channel Type") +
   custom_youtube_theme()
-# 
-# print(p11)
-# 
+print(p11)
+
 # # 分析Pearson相关系数
 # cor_result <- cor.test(youtube_data$video.views, youtube_data$highest_monthly_earnings, method="pearson")
 # print(cor_result)
@@ -276,6 +315,7 @@ p12 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
   geom_density(color = "#3366CC") +
   ggtitle("Distribution of YouTube Channel Creation Year (Density)") +
   custom_youtube_theme()
+print(p12)
 
 # 创建年份2010年至2020年之间的分布情况
 p13 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
@@ -284,7 +324,7 @@ p13 <- ggplot(data = youtube_data, mapping = aes(x = created_year)) +
   coord_cartesian(xlim = c(2010, 2020)) +
   ggtitle("YouTube Channel Creation Year (2010 to 2020)") +
   custom_youtube_theme()
-
+print(p13)
 
 # Filter data for years between 2010 and 2020
 youtube_data_filtered <- youtube_data[youtube_data$created_year >= 2010 & youtube_data$created_year <= 2020,]
@@ -299,25 +339,10 @@ p14 <- ggplot(data = youtube_data_filtered, aes(x = factor(created_year), y = su
 
 print(p14)
 
-cor_result <- cor.test(youtube_data_filtered$created_year, youtube_data_filtered$subscribers, method = "pearson")
-print(cor_result)
+# cor_result <- cor.test(youtube_data_filtered$created_year, youtube_data_filtered$subscribers, method = "pearson")
+# print(cor_result)
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```

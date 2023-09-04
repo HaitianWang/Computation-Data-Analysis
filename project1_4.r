@@ -1,3 +1,11 @@
+---
+title: "Project1_4"
+output: html_document
+date: "2023-09-03"
+---
+
+``` {r}
+
 library(tidyverse) 
 library(lubridate)
 library(gridExtra)
@@ -302,22 +310,4 @@ print(p14)
 cor_result <- cor.test(youtube_data_filtered$created_year, youtube_data_filtered$subscribers, method = "pearson")
 print(cor_result)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
