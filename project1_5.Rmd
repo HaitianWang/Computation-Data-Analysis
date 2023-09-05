@@ -1,10 +1,12 @@
 ---
-title: "CITS4009 project1"
-author: "Haitian Wang"
+title: "CITS4009 project 1"
+author: "Haitian Wang (23815631)"
 student Number: "23815631"
 date: "2023-09-03"
 output: html_document
 ---
+
+Welcome to our 'YouTube Data Analysis' Shiny App demonstration. You can view the full video at the following link: https://youtu.be/C16coChaYr0.
 
 # 1. Introduction:
 The dataset at hand, titled "Global YouTube Statistics 2023," originates from Kaggle, a renowned platform for data science projects and competitions. The data was meticulously collected by Nidula Elgiriyewithana. For those unfamiliar, Kaggle serves as a hub where data enthusiasts and professionals alike can share datasets, participate in challenges, and contribute to a wealth of shared knowledge in the field of data science.
@@ -22,6 +24,8 @@ library(lubridate)
 library(gridExtra)
 library(reshape2)
 library(grid)
+library(shiny)
+library(shinyWidgets)
 ```
 
 ## 2.2 Main Data Loading
@@ -224,14 +228,6 @@ However, there are also some 'outliers', channels with relatively high subscribe
 
 ## 4.2 Analyzing Relationship between Subscribers and Country
 ```{r}
-p6 <- ggplot(data = youtube_data, mapping = aes(x = Country)) +
-  geom_bar(fill = "#99CCFF", color = "#3366CC") +
-  ggtitle("Number of YouTubers per Country") +
-  coord_flip()+
-  custom_youtube_theme()
-print(p6)
-
-
 top_countries <- youtube_data %>%
   count(Country) %>%
   arrange(-n) %>%
@@ -268,6 +264,14 @@ The "Average Subscribers per Country" chart, on the other hand, depicts the aver
 
 ## 4.3 Analyzing Relationship between Earning and video.views
 ```{r}
+p9 <- ggplot(data = youtube_data, mapping = aes(x = highest_monthly_earnings)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 50, fill = "#99CCFF", color = "#3366CC") +
+  geom_density(color = "#3366CC") +
+  scale_x_continuous(trans = 'log10', labels = scales::comma) +
+  ggtitle("Histogram of Highest Monthly Earnings (Log Scale)") +
+  custom_youtube_theme()
+print(p9)
+
 p10 <- ggplot(data = youtube_data, mapping = aes(y = highest_monthly_earnings)) +
   geom_boxplot(fill = "#99CCFF", color = "#3366CC") +
   ggtitle("Boxplot of Highest Monthly Earnings") +
@@ -328,6 +332,7 @@ It's worth noting that from our previous analysis, we determined that there's a 
 
 
 # 5. Shiny APP
+In this section, we'll provide an interactive application using R's Shiny framework to visually explore the YouTube data.
 
 ```{r}
 ui <- fluidPage(
@@ -400,6 +405,7 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
+
 
 
 
