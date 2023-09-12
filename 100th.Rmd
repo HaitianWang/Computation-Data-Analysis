@@ -5,7 +5,59 @@ date: "2023-09-12"
 output: html_document
 ---
 
+```{r Load libraries, message=FALSE}
+library(tidyverse) 
+library(lubridate)
+library(gridExtra)
+library(reshape2)
+library(grid)
+library(shiny)
+library(shinyWidgets)
+```
+
 ```{r}
+data.path <- "custdata.tsv"
+custdata <- read.delim(data.path,header = TRUE)
+
+str(custdata)
+
+mean.age <- mean(custdata$age)
+custdata$age.normalised <- custdata$age/mean.age
+print(custdata$age.normalised)
+
+hist(custdata$age.normalised, main="Distribution of Customer Ages", xlab="Age", border="black", col="lightblue")
+```
+
+```{r}
+sd.age <- sd(custdata$age)
+lower.bound <- mean.age - sd.age
+upper.bound <- mean.age + sd.age
+
+younger.customers <- sum(custdata$age < lower.bound)
+older.customers <- sum(custdata$age > upper.bound)
+
+print(sum(custdata$age > 0))
+print(younger.customers)
+print(older.customers)
+# Visual inspection
+hist(custdata$age, main="Distribution of Customer Ages", xlab="Age", border="black", col="lightblue")
 
 ```
+
+```{r}
+mean.age <- mean(custdata$age)
+std.age <- sd(custdata$age)
+custdata$age.normalised <- (custdata$age-mean.age)/std.age
+hist(custdata$age.normalised, main="Distribution of Customer Ages", xlab="Age", border="black", col="lightblue")
+```
+
+
+```{r}
+```
+
+
+
+
+
+
 
