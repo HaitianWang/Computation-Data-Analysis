@@ -53,7 +53,12 @@ hist(custdata$age.normalised, main="Distribution of Customer Ages", xlab="Age", 
 
 
 ```{r}
+attach(custdata)
+newdata <- custdata[order(sex, -income),]
+detach(custdata)
 ```
+
+
 
 
 
